@@ -228,12 +228,11 @@ const initialParams = {
         .attr('class', 'node-collapsibleGroup');
     collapsiblesWrapperGroup.filter((d) => {
         if(d._children) {
-            console.log("group")
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
                 let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
+                    .filter((f)=>f._children)
                     .attr('data-id', v.uniqueIdentifier);
-                console.log(v.uniqueIdentifier)
                 let collapsibles = collapsiblesWrapper.append('circle')
                     .attr('class', 'node-collapse')
                     .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
@@ -258,6 +257,38 @@ const initialParams = {
                     .text((c) => getCollapsibleSymbol(c.isCollapsed));
               
                   collapsiblesWrapper.on('click', click);
+            })
+        }
+        if(d.children) {
+            var childrenCount = d.children.length;
+            d.children.map((v, index)=>{
+                let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
+                    .filter((f)=>f.children)
+                    .attr('data-id', v.uniqueIdentifier);
+                let collapsibles = collapsiblesWrapper.append('circle')
+                    .attr('class', 'node-collapse')
+                    .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
+                    .attr('cy', attrs.nodeHeight)
+                    .attr('', setCollapsibleStatusProperty);
+                collapsibles
+                    .filter((c) => c.children || c._children)
+                    .attr('r', attrs.collapseCircleRadius)
+                    .attr('height', attrs.collapseCircleRadius);
+                
+                collapsiblesWrapper.append('text')
+                    .filter((c) => c.children || c._children)
+                    .attr('class', 'text-collapse')
+                    .attr('x', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
+                    .attr('y', (c) => attrs.nodeHeight + (c.isCollapsed ? 4 : 3))
+                    .attr('width', attrs.collapseCircleRadius)
+                    .attr('height', attrs.collapseCircleRadius)
+                    .style('font-size', attrs.collapsibleFontSize)
+                    .style('font-weight', '800')
+                    .attr('text-anchor', 'middle')
+                    .style('font-family', 'monospace')
+                    .text((c) => getCollapsibleSymbol(c.isCollapsed));
+              
+                collapsiblesWrapper.on('click', click);
             })
         }
     })
@@ -482,11 +513,14 @@ const initialParams = {
         dv.isCollapsed = !dv.isCollapsed;
         return getCollapsibleSymbol(dv.isCollapsed);
       });
-  
+      var expandedNode = d3.select(this).attr('data-id');
+      console.log(expandedNode)
       if (d.children) {
+        console.log('Children:', d.children)
         d._children = d.children;
         d.children = null;
       } else {
+        console.log("_children", d._children)
         d.children = d._children;
         d._children = null;
       }
