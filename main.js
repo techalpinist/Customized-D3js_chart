@@ -232,9 +232,8 @@ const initialParams = {
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
                 let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
-                    .attr('data-id', (c) => {c.uniqueIdentifier}
-                );
-        
+                    .attr('data-id', v.uniqueIdentifier);
+                console.log(v.uniqueIdentifier)
                 let collapsibles = collapsiblesWrapper.append('circle')
                     .attr('class', 'node-collapse')
                     .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
@@ -345,7 +344,6 @@ const initialParams = {
             x: source.x0,
             y: source.y0,
           };
-          console.log(o)
           return diagonal({
             source: o,
             target: o,
