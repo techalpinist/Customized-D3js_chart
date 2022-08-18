@@ -1,0 +1,130 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>CodePen - Redesigned - Company Employees Hierarchy Chart </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css">
+    <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body translate="no" data-new-gr-c-s-check-loaded="14.1073.0" data-gr-ext-installed="">
+    <div id="full-container">
+      <div class="hierarchy-svg-chart"></div>
+    </div>
+
+    <script>
+        const mockData = {
+          isHeader: true,
+          label: "GROUP #1",
+          children: [{
+            label: "Group #1 - Product 1",
+            children: [{
+              isHeader: true,
+              label: "GROUP #1__1",
+              children: [{
+                label: 'Group #1__1 - Product 1',
+                children: [{
+                  isHeader: true,
+                  label: "GROUP #1__1__1",
+                  children: [{
+                    label: 'Group #1__1__1 - Product 1'
+                  }, {
+                    label: 'Group #1__1__1 - Product 2'
+                  }, {
+                    label: 'Group #1__1__1 - Product 3'
+                  }, ],
+                }, {
+                  isHeader: true,
+                  label: "GROUP #1__1__2",
+                  children: [{
+                    label: 'Group #1__1__2 - Product 1'
+                  }, {
+                    label: 'Group #1__1__2 - Product 2'
+                  }, {
+                    label: 'Group #1__1__2 - Product 3'
+                  }, ],
+                }, ],
+              }, {
+                label: 'Group #1__2 - Product 2'
+              }, {
+                label: 'Group #1__2 - Product 3',
+                children: [{
+                  isHeader: true,
+                  label: "GROUP #2__1__1",
+                  children: [{
+                    label: 'Group #2__1__1 - Product 1'
+                  }, {
+                    label: 'Group #2__1__1 - Product 2'
+                  }, {
+                    label: 'Group #2__1__1 - Product 3'
+                  }, ],
+                }, {
+                  isHeader: true,
+                  label: "GROUP #2__1__2",
+                  children: [{
+                    label: 'Group #2__1__2 - Product 1'
+                  }, {
+                    label: 'Group #2__1__2 - Product 2'
+                  }, {
+                    label: 'Group #2__1__2 - Product 3'
+                  }, ],
+                }, ],
+              }, ],
+            }, {
+              isHeader: true,
+              label: "GROUP #1__2",
+              children: [{
+                label: 'Group #1__2 - Product 1'
+              }, {
+                label: 'Group #1__2 - Product 2'
+              }, {
+                label: 'Group #1__2 - Product 3'
+              }, ],
+            }, {
+              isHeader: true,
+              label: "GROUP #1__3",
+              children: [{
+                label: 'Group #1__3 - Product 1',
+                children: [{
+                  label: 'Group #1__3 - Product 1',
+                  children: [{
+                    isHeader: true,
+                    label: "GROUP #1__3__1",
+                    children: [{
+                      label: 'Group #1__3__1 - Product 1'
+                    }, {
+                      label: 'Group #1__3__1 - Product 2'
+                    }, {
+                      label: 'Group #1__3__1 - Product 3'
+                    }, ],
+                  }, {
+                    isHeader: true,
+                    label: "GROUP #1__3__2",
+                    children: [{
+                      label: 'Group #1__3__2 - Product 1'
+                    }, {
+                      label: 'Group #1__3__2 - Product 2'
+                    }, {
+                      label: 'Group #1__3__2 - Product 3'
+                    }, ],
+                  }, ],
+                }, {
+                  label: 'Group #1__3 - Product 2'
+                }, ],
+              }, {
+                label: 'Group #1__3 - Product 2'
+              }, {
+                label: 'Group #1__3 - Product 3'
+              }, ],
+            }, ],
+          }, ],
+        };
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="./main.js"></script>
+  </body>
+
+</html>

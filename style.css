@@ -1,0 +1,381 @@
+  /* ########################   DEPARTMENT INFO   ############################ */
+
+  .department-information {
+    font-family: 'Roboto', sans-serif;
+    display:none;
+    box-shadow: 0 0 5px #999999;
+    position: absolute;
+    max-width: 200px;
+    top: 60px;
+    left: 20px;
+    padding: 10px;
+    background-color: white;
+  }
+
+  .department-information .dept-name {
+    color: #26a69a;
+    font-weight: bold;
+  }
+
+  .department-information .dept-description {
+    margin-top: 10px;
+    color: #959b9a;
+    font-size: 13px;
+  }
+
+  /* ##############################   SEARCHBOX   ######################################### */
+
+  .search-box {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    top: 0;
+    width: 0;
+    background-color: white;
+    border: 1px solid #c7dddb;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  ::-webkit-input-placeholder {
+    /* WebKit, Blink, Edge */
+    color: #bcbcc4;
+    opacity: 0.5;
+  }
+
+  :-moz-placeholder {
+    /* Mozilla Firefox 4 to 18 */
+    color: #bcbcc4;
+    opacity: 0.5;
+  }
+
+  ::-moz-placeholder {
+    /* Mozilla Firefox 19+ */
+    color: #bcbcc4;
+    opacity: 0.5;
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #bcbcc4;
+    opacity: 0.5;
+  }
+
+  .search-box .input-box {
+    width: 100%;
+    height: 200px;
+    top: 0;
+    background-color: #e8efee;
+  }
+
+  .search-box .close-button-wrapper i {
+    margin: 10px;
+    margin-left: 9%;
+    font-size: 60px;
+    font-weight: 400;
+    color: #aa1414;
+  }
+
+  .search-box input {
+    color: gray !important;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #9e9e9e;
+    border-radius: 0;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    font-size: 1rem;
+    margin: 0 0 20px 0;
+    padding: 0;
+    box-shadow: none;
+    box-sizing: content-box;
+    transition: all 0.3s;
+  }
+
+  .search-box input:focus {
+    border-bottom: 1px solid #26a69a;
+    box-shadow: 0 1px 0 0 #26a69a;
+  }
+
+  .search-box .result-header {
+    background-color: white;
+    font-weight: 700;
+    padding: 12px;
+    color: gray;
+    border-top: 2px solid #d3e8e5;
+    border-bottom: 1px solid #d3e8e5;
+  }
+
+  .search-box .result-list {
+    position: absolute;
+    max-height: 100%;
+    min-width: 100%;
+    overflow: auto;
+  }
+
+  .search-box .buffer {
+    width: 100%;
+    height: 400px;
+  }
+
+  .search-box .list-item {
+    clear: both;
+    background-color: white;
+    position: relative;
+    background-color: white;
+    width: 100%;
+    height: 100px;
+    border-top: 1px solid #d3e8e5;
+  }
+
+  .search-box .list-item a {
+    display: inline;
+    margin: 0;
+  }
+
+  .search-box .list-item .image-wrapper {
+    float: left;
+    width: 100px;
+    height: 100px;
+  }
+
+  .search-box .list-item .image {
+    width: 70px;
+    height: 70px;
+    margin-left: 15px;
+    margin-top: 15px;
+    border-radius: 5px;
+  }
+
+  .search-box .list-item .description {
+    padding: 15px;
+    padding-left: 0px;
+    float: left;
+    width: 180px;
+  }
+
+  .search-box .list-item .buttons {
+    padding: 15px;
+    padding-left: 0px;
+    float: left;
+    width: auto;
+  }
+  .search-box .list-item .description .name {
+    font-size: 15px;
+    color: #aa1414;
+    font-weight: 900;
+    margin: 0;
+    padding: 0;
+    letter-spacing: 1px;
+  }
+
+  .search-box .list-item .description .position-name {
+    color: #59525b;
+    letter-spacing: 1px;
+    font-size: 12px;
+    font-weight: 900;
+    margin: 0;
+    margin-top: 3px;
+    padding: 0;
+  }
+
+  .search-box .list-item .description .area {
+    color: #91a4a5;
+    letter-spacing: 1px;
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+    margin-top: 3px;
+    padding: 0;
+  }
+  .search-box .list-item .btn-locate{
+    margin-top:30px;
+  }
+
+  .search-box .list-item .btn-search-box{
+    font-size:10px;
+  }
+
+  .search-box .close-button-wrapper i:hover {
+    color: black;
+    cursor: pointer;
+  }
+
+  .search-box .input-wrapper {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .search-box .input-bottom-placeholder {
+    margin-top: -16px;
+    color: #bcbcc4;
+    letter-spacing: 1px;
+  }
+
+
+  /* ###############################   Tooltip css   ########################### */
+
+  .customTooltip-wrapper {
+    opacity: 0;
+    /* NEW */
+    display: none;
+    position: absolute;
+  }
+
+  .customTooltip {
+    width: 220px;
+    height: 80px;
+    padding: 10px;
+    background: white;
+    box-shadow: 0 0 5px #999999;
+    position: absolute;
+    font-size: 12px;
+    left: 130px;
+    text-align: center;
+    top: 95px;
+    z-index: 10;
+    text-align: left;
+
+
+  }
+
+  .tooltip-title {
+      color: #33476e;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-size: 16px;
+      margin-bottom: 2px;
+      text-align: center;
+    }
+
+  /* #############################   Buttons   ############################################ */
+
+  .btn-search {
+    top: 80px;
+  }
+
+  .btn-fullscreen {
+    top: 20px;
+  }
+
+  .btn-back {
+    top: 20px;
+    left: 20px;
+    display: none;
+  }
+
+  .btn-show-my-self {
+    top: 50px;
+  }
+
+  .btn-action {
+    position: absolute;
+    right: 25px;
+    height: 26px;
+    color: white;
+    background-color: #aa1414;
+    border: 1px solid black;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .btn-action:focus {
+    outline: 0;
+    background-color: #aa1414;
+  }
+
+  .btn-action:hover {
+    background-color: #490b0b;
+  }
+
+  .btn-action i {
+    font-size: 14px;
+  }
+
+  .btn-action .icon {
+    background-color: #c19e45;
+    padding: 5px 6px 5px 6px;
+    border-radius: 11px;
+    margin-right: -7px;
+  }
+
+
+  /* ##############################################   SVG   ################################# */
+
+  .nodeHasChildren {
+    fill: white;
+  }
+
+  .nodeDoesNotHaveChildren {
+    fill: white;
+  }
+
+  .nodeRepresentsCurrentItem {
+    stroke: Chartreuse;
+    stroke-width: 3;
+  }
+
+  text {
+    fill: dimgray;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
+
+  .node {
+    cursor: pointer;
+  }
+
+  .node-rect {
+      fill: #dbdbdb;
+    }
+
+    .node-rect.category {
+        fill: #1D087B;
+      }
+
+    .node-rect-header {
+      fill: #0E6305;
+    }
+
+    .node-rect-category-name {
+      fill: white;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .node-rect-name {
+      fill: white;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .node-rect-measurement {
+      fill: #042003;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .node-collapse {
+      stroke-width: 1px;
+      stroke: #0E6305;
+      fill: #0E6305;
+    }
+
+    .text-collapse {
+      fill: white;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+    }
+
+    .node-children-count {
+        fill: #f00;
+    }
