@@ -296,41 +296,6 @@ const initialParams = {
             })
         }
     })
-            
-    
-    // const collapsiblesWrapper =
-    //     nodeEnter.append('g')
-    //       .attr('data-id', (d) => {
-    //         d.uniqueIdentifier}
-    //     );
-  
-    //   const collapsibles =
-    //     collapsiblesWrapper.append('circle')
-    //       .attr('class', 'node-collapse')
-    //       .attr('cx', (attrs.nodeWidth / 2))
-    //       .attr('cy', attrs.nodeHeight)
-    //       .attr('', setCollapsibleStatusProperty);
-  
-    //   // hide collapse rect when node does not have children
-    //   collapsibles
-    //     .filter((d) => d.children || d._children)
-    //     .attr('r', attrs.collapseCircleRadius)
-    //     .attr('height', attrs.collapseCircleRadius);
-  
-    //   collapsiblesWrapper.append('text')
-    //     .filter((d) => d.children || d._children)
-    //     .attr('class', 'text-collapse')
-    //     .attr('x', attrs.nodeWidth / 2)
-    //     .attr('y', (d) => attrs.nodeHeight + (d.isCollapsed ? 4 : 3))
-    //     .attr('width', attrs.collapseCircleRadius)
-    //     .attr('height', attrs.collapseCircleRadius)
-    //     .style('font-size', attrs.collapsibleFontSize)
-    //     .style('font-weight', '800')
-    //     .attr('text-anchor', 'middle')
-    //     .style('font-family', 'monospace')
-    //     .text((d) => getCollapsibleSymbol(d.isCollapsed));
-  
-    //   collapsiblesWrapper.on('click', click);
   
       // Transition nodes to their new position.
       const nodeUpdate = node.transition()
@@ -531,17 +496,18 @@ const initialParams = {
       // }
       // update(d);
 
-      expandChild(d, {id: expandedNode, isCollapsed: isCollapsing})
+      clickChild(d, {id: expandedNode, isCollapsed: isCollapsing})
     }
 
-    function expandChild(d, params) {
+    function clickChild(d, params) {
       console.log(d._children)
       d._children.map((e)=>{
         if(!d.children) d.children = []
         if(e.uniqueIdentifier == params.id && params.isCollapsed == 0)
           {
             d.children.push(e);
-            d._children.pop(e);
+            let index = d._children.indexOf(e)
+            d._children.splice(index, 1)
           }
       })
       
@@ -550,7 +516,8 @@ const initialParams = {
         if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
           {
             d._children.push(e);
-            d.children.pop(e);
+            let index = d.children.indexOf(e)
+            d.children.splice(index, 1)
           }
       })
 
