@@ -491,13 +491,12 @@ const initialParams = {
 
     function clickChild(d, params) {
       console.log(d)
-      if(d._children) {
+      if(!params.isCollapsed) {
         d._children.map((e)=>{ //expanding
           if(!d.children) d.children = []
           if(e.uniqueIdentifier == params.id && params.isCollapsed == 0) {
             if(e.isHeader) {
               expandChildren(d, e)
-              // return;
             } else {
               d.children.push(e);
               let index = d._children.indexOf(e)
@@ -507,18 +506,27 @@ const initialParams = {
         })
         update(d); return;
       }
-      if(d.children) {
+      if(params.isCollapsed) {
         console.log('clicked')
-        d.children.map((e)=>{ //collapsing
+        d._children.map(e=>{
           if(!d._children) d._children = []
-          if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
-            {
-
-              d._children.push(e);
-              let index = d.children.indexOf(e)
-              d.children.splice(index, 1)
-            }
+          if(e.uniqueIdentifier == params.id && params.isCollapsed == 1) {
+            collapseChildren(d, e)
+          }
         })
+        // d.children.map((e)=>{ //collapsing
+        //   if(!d._children) d._children = []
+        //   if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
+        //     {
+        //       if(e.isHeader) {
+        //         collapseChildren(d, e)
+        //       } else {
+        //         d._children.push(e);
+        //         let index = d.children.indexOf(e)
+        //         d.children.splice(index, 1)
+        //       }
+        //     }
+        // })
         update(d); return;
       }
       
@@ -536,12 +544,12 @@ const initialParams = {
     }
 
     function collapseChildren(d, e) {
-      if(e.children) {
-        e.children.map((c)=>{
-          if(!d._children) d._children = []
-          d._children.push(c);
+      console.log('collapsing...', e._children)
+      if(e._children) {
+        e._children.map((c)=>{
           let index = d.children.indexOf(c)
-          d.children.splice(index, 1)
+          if(index >= 0)
+            d.children.splice(index, 1)
         })
       }
     }
