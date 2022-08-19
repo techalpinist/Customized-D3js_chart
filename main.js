@@ -485,7 +485,8 @@ const initialParams = {
     }
 
     function clickChild(d, params) {
-      d._children.map((e)=>{
+      if(d._children)
+      d._children.map((e)=>{ //expanding
         if(!d.children) d.children = []
         if(e.uniqueIdentifier == params.id && params.isCollapsed == 0)
           {
@@ -494,8 +495,8 @@ const initialParams = {
             d._children.splice(index, 1)
           }
       })
-      
-      d.children.map((e)=>{
+      if(d.children)
+      d.children.map((e)=>{ //collapsing
         if(!d._children) d._children = []
         if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
           {
