@@ -232,7 +232,7 @@ const initialParams = {
                 let collapsiblesWrapper = collapsiblesWrapperGroup
                     .filter((f)=>f._children)
                     .append('g')
-                    .attr('isCollapsed', 1)
+                    .attr('isCollapsed', v.depth ? 0 : 1)
                     .attr('data-id', v.uniqueIdentifier);
                 let collapsibles = collapsiblesWrapper
                     .attr('class', 'node-collapse')
@@ -268,7 +268,7 @@ const initialParams = {
                 let collapsiblesWrapper = collapsiblesWrapperGroup
                     .filter((f)=>f.children)
                     .append('g')
-                    .attr('isCollapsed', 1)
+                    .attr('isCollapsed', v.depth ? 0 : 1)
                     .attr('data-id', v.uniqueIdentifier);
                 let collapsibles = collapsiblesWrapper
                     .append('circle')
@@ -492,8 +492,8 @@ const initialParams = {
     function clickChild(d, params) {
       console.log(d)
       if(!params.isCollapsed) {
+        if(!d.children) d.children = []
         d._children.map((e)=>{ //expanding
-          if(!d.children) d.children = []
           if(e.uniqueIdentifier == params.id && params.isCollapsed == 0) {
             if(e.isHeader) {
               expandChildren(d, e)
@@ -507,9 +507,8 @@ const initialParams = {
         update(d); return;
       }
       if(params.isCollapsed) {
-        console.log('clicked')
+        if(!d._children) d._children = []
         d._children.map(e=>{
-          if(!d._children) d._children = []
           if(e.uniqueIdentifier == params.id && params.isCollapsed == 1) {
             collapseChildren(d, e)
           }
