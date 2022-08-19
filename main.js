@@ -24,7 +24,6 @@ const initialParams = {
   
   function drawHierarchyChart(params) {
     // listen();
-  
     const attrs = {
       selector: params.selector,
       root: params.data,
@@ -108,7 +107,7 @@ const initialParams = {
       attrs.root.children.forEach(collapse);
     }
   
-    update(attrs.root, { horizontalCentering: true });
+    update(attrs.root);
   
     d3.select(attrs.selector).style('height', attrs.height);
   
@@ -230,12 +229,14 @@ const initialParams = {
         if(d._children) {
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
-                let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
+                let collapsiblesWrapper = collapsiblesWrapperGroup
                     .filter((f)=>f._children)
+                    .append('g')
                     .attr('isCollapsed', 1)
                     .attr('data-id', v.uniqueIdentifier);
-                let collapsibles = collapsiblesWrapper.append('circle')
+                let collapsibles = collapsiblesWrapper
                     .attr('class', 'node-collapse')
+                    .append('circle')
                     .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
                     .attr('cy', attrs.nodeHeight)
                     .attr('', setCollapsibleStatusProperty);
@@ -244,15 +245,16 @@ const initialParams = {
                     .attr('r', attrs.collapseCircleRadius)
                     .attr('height', attrs.collapseCircleRadius);
                 
-                collapsiblesWrapper.append('text')
+                collapsiblesWrapper
                     .filter((c) => c.children || c._children)
+                    .append('text')
                     .attr('class', 'text-collapse')
                     .attr('x', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
                     .attr('y', (c) => attrs.nodeHeight + (c.isCollapsed ? 4 : 3))
                     .attr('width', attrs.collapseCircleRadius)
                     .attr('height', attrs.collapseCircleRadius)
                     .style('font-size', attrs.collapsibleFontSize)
-                    .style('font-weight', '800')
+                    .style('font-weight', '600')
                     .attr('text-anchor', 'middle')
                     .style('font-family', 'monospace')
                     .text((c) => getCollapsibleSymbol(c.isCollapsed));
@@ -263,11 +265,13 @@ const initialParams = {
         if(d.children) {
             var childrenCount = d.children.length;
             d.children.map((v, index)=>{
-                let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
+                let collapsiblesWrapper = collapsiblesWrapperGroup
                     .filter((f)=>f.children)
+                    .append('g')
                     .attr('isCollapsed', 1)
                     .attr('data-id', v.uniqueIdentifier);
-                let collapsibles = collapsiblesWrapper.append('circle')
+                let collapsibles = collapsiblesWrapper
+                    .append('circle')
                     .attr('class', 'node-collapse')
                     .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
                     .attr('cy', attrs.nodeHeight)
@@ -277,15 +281,16 @@ const initialParams = {
                     .attr('r', attrs.collapseCircleRadius)
                     .attr('height', attrs.collapseCircleRadius);
                 
-                collapsiblesWrapper.append('text')
+                collapsiblesWrapper
                     .filter((c) => c.children || c._children)
+                    .append('text')
                     .attr('class', 'text-collapse')
                     .attr('x', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
                     .attr('y', (c) => attrs.nodeHeight + (c.isCollapsed ? 4 : 3))
                     .attr('width', attrs.collapseCircleRadius)
                     .attr('height', attrs.collapseCircleRadius)
                     .style('font-size', attrs.collapsibleFontSize)
-                    .style('font-weight', '800')
+                    .style('font-weight', '600')
                     .attr('text-anchor', 'middle')
                     .style('font-family', 'monospace')
                     .text((c) => getCollapsibleSymbol(c.isCollapsed));
@@ -476,37 +481,69 @@ const initialParams = {
   
     // Toggle children on click.
     function click(d) {
-      var expandedNode = d3.select(this).attr('data-id');
+      var clickedId = d3.select(this).attr('data-id');
       var isCollapsing = 1^d3.select(this).attr('isCollapsed')
       d3.select(this).attr('isCollapsed', isCollapsing)
       d3.select(this).select('text').text(getCollapsibleSymbol(isCollapsing));
 
-      clickChild(d, {id: expandedNode, isCollapsed: isCollapsing})
+      clickChild(d, {id: clickedId, isCollapsed: isCollapsing})
     }
 
     function clickChild(d, params) {
-      if(d._children)
-      d._children.map((e)=>{ //expanding
-        if(!d.children) d.children = []
-        if(e.uniqueIdentifier == params.id && params.isCollapsed == 0)
-          {
-            d.children.push(e);
-            let index = d._children.indexOf(e)
-            d._children.splice(index, 1)
-          }
-      })
-      if(d.children)
-      d.children.map((e)=>{ //collapsing
-        if(!d._children) d._children = []
-        if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
-          {
-            d._children.push(e);
-            let index = d.children.indexOf(e)
-            d.children.splice(index, 1)
-          }
-      })
+      console.log(d)
+      if(d._children) {
+        d._children.map((e)=>{ //expanding
+          if(!d.children) d.children = []
+          if(e.uniqueIdentifier == params.id && params.isCollapsed == 0) {
+            if(e.isHeader) {
+              expandChildren(d, e)
+              // return;
+            } else {
+              d.children.push(e);
+              let index = d._children.indexOf(e)
+              d._children.splice(index, 1)
+            } 
+          } 
+        })
+        update(d); return;
+      }
+      if(d.children) {
+        console.log('clicked')
+        d.children.map((e)=>{ //collapsing
+          if(!d._children) d._children = []
+          if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
+            {
 
-      update(d);
+              d._children.push(e);
+              let index = d.children.indexOf(e)
+              d.children.splice(index, 1)
+            }
+        })
+        update(d); return;
+      }
+      
+    }
+
+    function expandChildren(d, e) {
+      if (e._children)
+        e._children.map((c)=>{
+          if(!d.children) d.children = []
+          d.children.push(c);
+          let index = d._children.indexOf(c)
+          if(index >= 0)
+            d._children.splice(index, 1)
+        })
+    }
+
+    function collapseChildren(d, e) {
+      if(e.children) {
+        e.children.map((c)=>{
+          if(!d._children) d._children = []
+          d._children.push(c);
+          let index = d.children.indexOf(c)
+          d.children.splice(index, 1)
+        })
+      }
     }
   
     // ########################################################
