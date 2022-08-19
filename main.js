@@ -485,17 +485,6 @@ const initialParams = {
       console.log('Collapsing:', isCollapsing)
       d3.select(this).select('text').text(getCollapsibleSymbol(isCollapsing));
 
-      // if (d.children) {
-      //   d._children = d.children;
-      //   d.children = null;
-      //   console.log(d._children)
-      // } else {
-      //   d.children = d._children;
-      //   d._children = null;
-      //   console.log(d.children)
-      // }
-      // update(d);
-
       clickChild(d, {id: expandedNode, isCollapsed: isCollapsing})
     }
 
