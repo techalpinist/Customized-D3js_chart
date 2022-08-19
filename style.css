@@ -339,7 +339,7 @@
     }
 
     .node-rect.category {
-        fill: #1D087B;
+        fill: #0E6305;
       }
 
     .node-rect-header {
@@ -366,7 +366,7 @@
 
     .node-collapse {
       stroke-width: 1px;
-      stroke: #0E6305;
+      stroke: #fff;
       fill: #0E6305;
     }
 

@@ -120,7 +120,7 @@ const initialParams = {
       // Compute the new tree layout.
       const nodes = tree.nodes(attrs.root).reverse();
       const links = tree.links(nodes);
-  
+
       // Normalize for fixed-depth.
       nodes.forEach((d) => {
         d.y = d.depth * attrs.linkLineSize;
@@ -135,7 +135,7 @@ const initialParams = {
           }
           return d.id;
         });
-  
+
       // Enter any new nodes at the parent's previous position.
       const nodeEnter = node.enter()
         .append('g')
@@ -153,6 +153,8 @@ const initialParams = {
         .attr(
           'class',
           (d) => {
+            console.log(d)
+            console.log('====================')
             const hasChildrenClass = d._children || d.children ? 'nodeHasChildren' : 'nodeDoesNotHaveChildren';
             return `node-rect ${hasChildrenClass} ${d.isHeader ? ' category' : ''}`;
           },
@@ -232,6 +234,7 @@ const initialParams = {
             d._children.map((v, index)=>{
                 let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
                     .filter((f)=>f._children)
+                    .attr('isCollapsed', 1)
                     .attr('data-id', v.uniqueIdentifier);
                 let collapsibles = collapsiblesWrapper.append('circle')
                     .attr('class', 'node-collapse')
@@ -264,6 +267,7 @@ const initialParams = {
             d.children.map((v, index)=>{
                 let collapsiblesWrapper = collapsiblesWrapperGroup.append('g')
                     .filter((f)=>f.children)
+                    .attr('isCollapsed', 1)
                     .attr('data-id', v.uniqueIdentifier);
                 let collapsibles = collapsiblesWrapper.append('circle')
                     .attr('class', 'node-collapse')
@@ -509,21 +513,29 @@ const initialParams = {
   
     // Toggle children on click.
     function click(d) {
+      console.log(d)
       var expandedNode = d3.select(this).attr('data-id');
-      console.log(expandedNode)
-
-      d3.select(this).select('text').text((dv) => {
-        dv.isCollapsed = !dv.isCollapsed;
-        return getCollapsibleSymbol(dv.isCollapsed);
-      });
+      var isCollapsing = 1^d3.select(this).attr('isCollapsed')
+      d3.select(this).attr('isCollapsed', isCollapsing)
+      console.log('Collapsing:', isCollapsing)
+      d3.select(this).select('text').text(getCollapsibleSymbol(isCollapsing));
       if (d.children) {
         d._children = d.children;
         d.children = null;
+        console.log(d._children)
       } else {
         d.children = d._children;
         d._children = null;
+        console.log(d.children)
       }
       update(d);
+
+      // expandChild(d, {id: expandedNode, isCollapsed: isCollapsing})
+    }
+
+    function expandChild(d, params) {
+      console.log("Expanding child")
+      update(d)
     }
   
     // ########################################################
@@ -710,8 +722,8 @@ const initialParams = {
     // }
   
     function expandAll() {
-      expand(root);
-      update(root);
+      expand(attrs.root);
+      update(attrs.root);
     }
   
     function expand(d) {
