@@ -438,12 +438,12 @@ const initialParams = {
           y += 220 - y;
           x += 130;
         }
-  
+
         if (y > attrs.height - 300) {
           y -= 300 - (attrs.height - y);
         }
-  
-        tooltip.style('top', `${y - 300}px`)
+
+        tooltip.style('top', `${y-150}px`)
           .style('left', `${x - 470}px`);
       }
   
