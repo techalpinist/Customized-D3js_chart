@@ -334,13 +334,11 @@ const initialParams = {
         .attr('height', attrs.nodeHeight);
   
       // Update the links
-      var linkNode;
       const link = svg.selectAll('path.link')
         .data(links, (d) => {
           // console.log(d)
           return d.target.id
         });
-        console.log(link)
       // Enter any new links at the parent's previous position.
       link.enter().insert('path', 'g')
         .attr('class', 'link')
@@ -361,10 +359,23 @@ const initialParams = {
       link.transition()
         .duration(attrs.duration)
         .attr('d', (d)=>{
-
+          console.log(d)
+          let count = 1;
+          let index = 0;
+          if(d.source._children) {
+            count = d.source._children.length;
+            var indexGroup=[];
+            d.source._children.map((e)=>{
+              indexGroup.push(e.uniqueIdentifier)
+            })
+            console.log(indexGroup)
+            console.log(param.clickedId)
+            index = indexGroup.indexOf(parseInt(param.clickedId))
+          }
+          console.log(index)
           return diagonal({
             source: {
-              x: d.source.x,
+              x: d.source.x - attrs.nodeWidth/2 + attrs.nodeWidth/count*index + attrs.nodeWidth/count/2,
               y: d.source.y + attrs.nodeHeight / 2
             },
             target: {
@@ -520,7 +531,7 @@ const initialParams = {
             } 
           } 
         })
-        update(d); return;
+        update(d, {clickedId: params.id}); return;
       }
       if(params.isCollapsed) {
         if(!d._children) d._children = []
@@ -542,7 +553,7 @@ const initialParams = {
         //       }
         //     }
         // })
-        update(d); return;
+        update(d, {clickedId: params.id}); return;
       }
       
     }
