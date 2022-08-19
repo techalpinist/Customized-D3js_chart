@@ -153,8 +153,6 @@ const initialParams = {
         .attr(
           'class',
           (d) => {
-            console.log(d)
-            console.log('====================')
             const hasChildrenClass = d._children || d.children ? 'nodeHasChildren' : 'nodeDoesNotHaveChildren';
             return `node-rect ${hasChildrenClass} ${d.isHeader ? ' category' : ''}`;
           },
@@ -478,18 +476,15 @@ const initialParams = {
   
     // Toggle children on click.
     function click(d) {
-      console.log(d)
       var expandedNode = d3.select(this).attr('data-id');
       var isCollapsing = 1^d3.select(this).attr('isCollapsed')
       d3.select(this).attr('isCollapsed', isCollapsing)
-      console.log('Collapsing:', isCollapsing)
       d3.select(this).select('text').text(getCollapsibleSymbol(isCollapsing));
 
       clickChild(d, {id: expandedNode, isCollapsed: isCollapsing})
     }
 
     function clickChild(d, params) {
-      console.log(d._children)
       d._children.map((e)=>{
         if(!d.children) d.children = []
         if(e.uniqueIdentifier == params.id && params.isCollapsed == 0)
@@ -509,9 +504,6 @@ const initialParams = {
             d.children.splice(index, 1)
           }
       })
-
-      console.log('Expanding children: ', d.children)
-      console.log('Collapsing children: ', d._children)
 
       update(d);
     }
