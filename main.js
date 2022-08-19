@@ -519,23 +519,45 @@ const initialParams = {
       d3.select(this).attr('isCollapsed', isCollapsing)
       console.log('Collapsing:', isCollapsing)
       d3.select(this).select('text').text(getCollapsibleSymbol(isCollapsing));
-      if (d.children) {
-        d._children = d.children;
-        d.children = null;
-        console.log(d._children)
-      } else {
-        d.children = d._children;
-        d._children = null;
-        console.log(d.children)
-      }
-      update(d);
 
-      // expandChild(d, {id: expandedNode, isCollapsed: isCollapsing})
+      // if (d.children) {
+      //   d._children = d.children;
+      //   d.children = null;
+      //   console.log(d._children)
+      // } else {
+      //   d.children = d._children;
+      //   d._children = null;
+      //   console.log(d.children)
+      // }
+      // update(d);
+
+      expandChild(d, {id: expandedNode, isCollapsed: isCollapsing})
     }
 
     function expandChild(d, params) {
-      console.log("Expanding child")
-      update(d)
+      console.log(d._children)
+      d._children.map((e)=>{
+        if(!d.children) d.children = []
+        if(e.uniqueIdentifier == params.id && params.isCollapsed == 0)
+          {
+            d.children.push(e);
+            d._children.pop(e);
+          }
+      })
+      
+      d.children.map((e)=>{
+        if(!d._children) d._children = []
+        if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
+          {
+            d._children.push(e);
+            d.children.pop(e);
+          }
+      })
+
+      console.log('Expanding children: ', d.children)
+      console.log('Collapsing children: ', d._children)
+
+      update(d);
     }
   
     // ########################################################
