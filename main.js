@@ -509,18 +509,17 @@ const initialParams = {
   
     // Toggle children on click.
     function click(d) {
+      var expandedNode = d3.select(this).attr('data-id');
+      console.log(expandedNode)
+
       d3.select(this).select('text').text((dv) => {
         dv.isCollapsed = !dv.isCollapsed;
         return getCollapsibleSymbol(dv.isCollapsed);
       });
-      var expandedNode = d3.select(this).attr('data-id');
-      console.log(expandedNode)
       if (d.children) {
-        console.log('Children:', d.children)
         d._children = d.children;
         d.children = null;
       } else {
-        console.log("_children", d._children)
         d.children = d._children;
         d._children = null;
       }
