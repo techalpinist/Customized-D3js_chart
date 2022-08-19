@@ -334,9 +334,13 @@ const initialParams = {
         .attr('height', attrs.nodeHeight);
   
       // Update the links
+      var linkNode;
       const link = svg.selectAll('path.link')
-        .data(links, (d) => d.target.id);
-  
+        .data(links, (d) => {
+          // console.log(d)
+          return d.target.id
+        });
+        console.log(link)
       // Enter any new links at the parent's previous position.
       link.enter().insert('path', 'g')
         .attr('class', 'link')
@@ -356,7 +360,19 @@ const initialParams = {
       // Transition links to their new position.
       link.transition()
         .duration(attrs.duration)
-        .attr('d', diagonal);
+        .attr('d', (d)=>{
+
+          return diagonal({
+            source: {
+              x: d.source.x,
+              y: d.source.y + attrs.nodeHeight / 2
+            },
+            target: {
+              x: d.target.x,
+              y: d.target.y - attrs.nodeHeight / 2
+            }
+          });
+        });
   
       // Transition exiting nodes to the parent's new position.
       link.exit().transition()
