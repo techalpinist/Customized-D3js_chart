@@ -150,7 +150,6 @@ const initialParams = {
       // Compute the new tree layout.
       const nodes = tree.nodes(attrs.root).reverse();
       const links = tree.links(nodes);
-
       // Normalize for fixed-depth.
       nodes.forEach((d) => {
         d.y = d.depth * attrs.linkLineSize;
@@ -167,7 +166,6 @@ const initialParams = {
         });
 
       // Enter any new nodes at the parent's previous position.
-      console.log(source)
       const nodeEnter = node.enter()
         .append('g')
         .attr('class', 'node')
@@ -257,7 +255,7 @@ const initialParams = {
     
     const collapsiblesWrapperGroup = nodeEnter.append('g')
         .attr('class', 'node-collapsibleGroup');
-    collapsiblesWrapperGroup.filter((d) => {
+    collapsiblesWrapperGroup.filter((d, wrapperId) => {
         if(d.depth==0){
           var childrenCount = d.children.length;
             d.children.map((v, index)=>{
@@ -296,7 +294,7 @@ const initialParams = {
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
                 let collapsiblesWrapper = collapsiblesWrapperGroup
-                    .filter((f)=>f._children)
+                    .filter((f, id)=>id==wrapperId)
                     .append('g')
                     .attr('isCollapsed', v.depth ? 0 : 1)
                     .attr('data-id', v.uniqueIdentifier);
@@ -327,43 +325,7 @@ const initialParams = {
               
                   collapsiblesWrapper.on('click', click);
             })
-        }
-        if(d.children) {
-            var childrenCount = d.children.length;
-            d.children.map((v, index)=>{
-                let collapsiblesWrapper = collapsiblesWrapperGroup
-                    .filter((f)=>f.children)
-                    .append('g')
-                    .attr('isCollapsed', v.depth ? 0 : 1)
-                    .attr('data-id', v.uniqueIdentifier);
-                let collapsibles = collapsiblesWrapper
-                    .append('circle')
-                    .attr('class', 'node-collapse')
-                    .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
-                    .attr('cy', attrs.nodeHeight)
-                    .attr('', setCollapsibleStatusProperty);
-                collapsibles
-                    .filter((c) => c.children || c._children)
-                    .attr('r', attrs.collapseCircleRadius)
-                    .attr('height', attrs.collapseCircleRadius);
-                
-                collapsiblesWrapper
-                    .filter((c) => c.children || c._children)
-                    .append('text')
-                    .attr('class', 'text-collapse')
-                    .attr('x', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
-                    .attr('y', (c) => attrs.nodeHeight + (c.isCollapsed ? 4 : 3))
-                    .attr('width', attrs.collapseCircleRadius)
-                    .attr('height', attrs.collapseCircleRadius)
-                    .style('font-size', attrs.collapsibleFontSize)
-                    .style('font-weight', '600')
-                    .attr('text-anchor', 'middle')
-                    .style('font-family', 'monospace')
-                    .text((c) => getCollapsibleSymbol(c.isCollapsed));
-              
-                collapsiblesWrapper.on('click', click);
-            })
-        }
+        } 
     })
   
       // Transition nodes to their new position.
@@ -402,7 +364,6 @@ const initialParams = {
       // Update the links
       const link = svg.selectAll('path.link')
         .data(links, (d) => {
-          // console.log(d)
           return d.target.id
         });
       // Enter any new links at the parent's previous position.
@@ -425,10 +386,8 @@ const initialParams = {
       link.transition()
         .duration(attrs.duration)
         .attr('d', (d)=>{
-          console.log(d)
           let count = 1;
           let index = 0;
-          console.log(d)
           if(d.source._children) {
             count = d.source._children.length;
             var indexGroup=[];
@@ -439,8 +398,7 @@ const initialParams = {
               d.source._children.map((e)=>{
                 indexGroup.push(e.uniqueIdentifier)
               })
-              
-              index = indexGroup.indexOf(4)
+              index = indexGroup.indexOf(parseInt(d.target.parentIndex))
             }
           }
           return diagonal({
@@ -587,17 +545,15 @@ const initialParams = {
     }
 
     function clickChild(d, params) {
-      console.log(d)
       if(!params.isCollapsed) {
         if(!d.children) d.children = []
         d._children.map((e)=>{ //expanding
           if(e.uniqueIdentifier == params.id && params.isCollapsed == 0) {
             if(e.isHeader) {
-              expandChildren(d, e)
+              expandChildren(d, e, params.id)
             } else {
+              e.parentIndex = params.id
               d.children.push(e);
-              let index = d._children.indexOf(e)
-              d._children.splice(index, 1)
             } 
           } 
         })
@@ -607,40 +563,30 @@ const initialParams = {
         if(!d._children) d._children = []
         d._children.map(e=>{
           if(e.uniqueIdentifier == params.id && params.isCollapsed == 1) {
-            collapseChildren(d, e)
+            if(e.uniqueIdentifier == e.parentIndex) {
+              let index = d.children.indexOf(e)
+              if(index >= 0)
+                d.children.splice(index, 1)
+            } else {
+              collapseChildren(d, e)
+            }
           }
         })
-        // d.children.map((e)=>{ //collapsing
-        //   if(!d._children) d._children = []
-        //   if(e.uniqueIdentifier == params.id && params.isCollapsed == 1)
-        //     {
-        //       if(e.isHeader) {
-        //         collapseChildren(d, e)
-        //       } else {
-        //         d._children.push(e);
-        //         let index = d.children.indexOf(e)
-        //         d.children.splice(index, 1)
-        //       }
-        //     }
-        // })
         update(d); return;
       }
       
     }
 
-    function expandChildren(d, e) {
+    function expandChildren(d, e, parentIndex) {
       if (e._children)
         e._children.map((c)=>{
           if(!d.children) d.children = []
+          c.parentIndex = parentIndex;
           d.children.push(c);
-          let index = d._children.indexOf(c)
-          if(index >= 0)
-            d._children.splice(index, 1)
         })
     }
 
     function collapseChildren(d, e) {
-      console.log('collapsing...', e._children)
       if(e._children) {
         e._children.map((c)=>{
           let index = d.children.indexOf(c)
