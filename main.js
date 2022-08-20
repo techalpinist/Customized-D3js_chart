@@ -74,7 +74,7 @@ const initialParams = {
 
     //##refactor mockData##
     var refactorMock = refactor(attrs.root)[0];
-    console.log(refactorMock)
+    // console.log(refactorMock)
     // attrs.root = refactorMock;
 
     params.functions.showSelectedNode = showSelectedNode;
@@ -428,6 +428,7 @@ const initialParams = {
           console.log(d)
           let count = 1;
           let index = 0;
+          console.log(d)
           if(d.source._children) {
             count = d.source._children.length;
             var indexGroup=[];
@@ -438,9 +439,8 @@ const initialParams = {
               d.source._children.map((e)=>{
                 indexGroup.push(e.uniqueIdentifier)
               })
-              console.log(indexGroup)
-              console.log(param.clickedId)
-              index = indexGroup.indexOf(parseInt(param.clickedId))
+              
+              index = indexGroup.indexOf(4)
             }
           }
           return diagonal({
@@ -601,7 +601,7 @@ const initialParams = {
             } 
           } 
         })
-        update(d, {clickedId: params.id}); return;
+        update(d); return;
       }
       if(params.isCollapsed) {
         if(!d._children) d._children = []
@@ -623,7 +623,7 @@ const initialParams = {
         //       }
         //     }
         // })
-        update(d, {clickedId: params.id}); return;
+        update(d); return;
       }
       
     }
