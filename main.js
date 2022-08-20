@@ -20,10 +20,36 @@ const initialParams = {
     data: mockData,
   };
   
+  function refactor(root){
+    var childrenNodes=[];
+    if(root.isHeader) {
+      for(var i=0; i < root.children.length; i ++) {
+        childrenNodes.push({
+          label: root.children[i].label,
+          children: refactor(root.children[i])
+        })
+      }
+    } else if(root.children) {
+      for(var i=0; i < root.children.length; i ++)
+        if(root.children[i].isHeader) //
+          childrenNodes.push(
+            refactor(root.children[i])
+          )
+        else 
+          childrenNodes.push({
+            label: root.children[i].label,
+            children: refactor(root.children[i])
+          })
+    } else {
+      childrenNodes.push(root)
+    }
+    return childrenNodes;
+  }
+
   drawHierarchyChart(initialParams);
   
   function drawHierarchyChart(params) {
-    // listen();
+
     const attrs = {
       selector: params.selector,
       root: params.data,
@@ -45,7 +71,12 @@ const initialParams = {
       nodeStroke: '#ccc',
       nodeStrokeWidth: '1px',
     };
-  
+
+    //##refactor mockData##
+    var refactorMock = refactor(attrs.root)[0];
+    console.log(refactorMock)
+    // attrs.root = refactorMock;
+
     params.functions.showSelectedNode = showSelectedNode;
     params.functions.expandAll = expandAll;
     params.functions.search = searchItems;
@@ -100,13 +131,13 @@ const initialParams = {
         return uniq;
       }, attrs.root);
     }
-  
+    
     expand(attrs.root);
   
     if (attrs.root.children) {
       attrs.root.children.forEach(collapse);
     }
-  
+
     update(attrs.root);
   
     d3.select(attrs.selector).style('height', attrs.height);
@@ -136,6 +167,7 @@ const initialParams = {
         });
 
       // Enter any new nodes at the parent's previous position.
+      console.log(source)
       const nodeEnter = node.enter()
         .append('g')
         .attr('class', 'node')
@@ -226,6 +258,40 @@ const initialParams = {
     const collapsiblesWrapperGroup = nodeEnter.append('g')
         .attr('class', 'node-collapsibleGroup');
     collapsiblesWrapperGroup.filter((d) => {
+        if(d.depth==0){
+          var childrenCount = d.children.length;
+            d.children.map((v, index)=>{
+                let collapsiblesWrapper = collapsiblesWrapperGroup
+                    .filter((f)=>f.children)
+                    .append('g')
+                    .attr('isCollapsed', v.depth ? 0 : 1)
+                    .attr('data-id', v.uniqueIdentifier);
+                let collapsibles = collapsiblesWrapper
+                    .append('circle')
+                    .attr('class', 'node-collapse')
+                    .attr('cx', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
+                    .attr('cy', attrs.nodeHeight)
+                    .attr('', setCollapsibleStatusProperty);
+                collapsibles
+                    .filter((c) => c.children || c._children)
+                    .attr('r', attrs.collapseCircleRadius)
+                    .attr('height', attrs.collapseCircleRadius);
+                
+                collapsiblesWrapper
+                    .filter((c) => c.children || c._children)
+                    .append('text')
+                    .attr('class', 'text-collapse')
+                    .attr('x', (attrs.nodeWidth / childrenCount * index + attrs.nodeWidth / childrenCount / 2))
+                    .attr('y', (c) => attrs.nodeHeight + (c.isCollapsed ? 4 : 3))
+                    .attr('width', attrs.collapseCircleRadius)
+                    .attr('height', attrs.collapseCircleRadius)
+                    .style('font-size', attrs.collapsibleFontSize)
+                    .style('font-weight', '600')
+                    .attr('text-anchor', 'middle')
+                    .style('font-family', 'monospace')
+            })
+          return;
+        }
         if(d._children) {
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
@@ -365,14 +431,18 @@ const initialParams = {
           if(d.source._children) {
             count = d.source._children.length;
             var indexGroup=[];
-            d.source._children.map((e)=>{
-              indexGroup.push(e.uniqueIdentifier)
-            })
-            console.log(indexGroup)
-            console.log(param.clickedId)
-            index = indexGroup.indexOf(parseInt(param.clickedId))
+            if(d.source.uniqueIdentifier == 2) {
+              count = 1;
+              index = 0;
+            } else {
+              d.source._children.map((e)=>{
+                indexGroup.push(e.uniqueIdentifier)
+              })
+              console.log(indexGroup)
+              console.log(param.clickedId)
+              index = indexGroup.indexOf(parseInt(param.clickedId))
+            }
           }
-          console.log(index)
           return diagonal({
             source: {
               x: d.source.x - attrs.nodeWidth/2 + attrs.nodeWidth/count*index + attrs.nodeWidth/count/2,
