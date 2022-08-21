@@ -235,22 +235,22 @@ const initialParams = {
         .attr('text-anchor', 'middle')
         .text('100%');
     //###
-    const childreCount = nodeEnter.append('g')
-        .attr('class', 'children-count');
-    childreCount.append('text')
-        .attr('x', attrs.nodeWidth / 2)
-        .attr('y', attrs.nodeHeaderHeight + 40)
-        .attr('class', 'node-children-count')
-        .attr('text-anchor', 'left')
-        .attr('dominant-baseline', 'middle')
-        .attr('text-anchor', 'middle')
-        .text((d)=>{
-            if(d.children) 
-                return d.children.length;
-            if(d._children)
-                return d._children.length;
+    // const childreCount = nodeEnter.append('g')
+    //     .attr('class', 'children-count');
+    // childreCount.append('text')
+    //     .attr('x', attrs.nodeWidth / 2)
+    //     .attr('y', attrs.nodeHeaderHeight + 40)
+    //     .attr('class', 'node-children-count')
+    //     .attr('text-anchor', 'left')
+    //     .attr('dominant-baseline', 'middle')
+    //     .attr('text-anchor', 'middle')
+    //     .text((d)=>{
+    //         if(d.children) 
+    //             return d.children.length;
+    //         if(d._children)
+    //             return d._children.length;
             
-        });
+    //     });
 
     const collapsiblesWrapperGroup = nodeEnter.append('g')
         .attr('class', 'node-collapsibleGroup');
@@ -289,7 +289,6 @@ const initialParams = {
             })
           return;
         }
-        console.log('Content: ', d.children)
 
         if(d._children) {
             var childrenCount = d._children.length;
