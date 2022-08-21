@@ -252,7 +252,6 @@ const initialParams = {
             
         });
 
-    
     const collapsiblesWrapperGroup = nodeEnter.append('g')
         .attr('class', 'node-collapsibleGroup');
     collapsiblesWrapperGroup.filter((d, wrapperId) => {
@@ -290,6 +289,8 @@ const initialParams = {
             })
           return;
         }
+        console.log('Content: ', d.children)
+
         if(d._children) {
             var childrenCount = d._children.length;
             d._children.map((v, index)=>{
@@ -325,7 +326,14 @@ const initialParams = {
               
                   collapsiblesWrapper.on('click', click);
             })
-        } 
+        }
+        if(d.children) {
+          d.children.map((v, index)=>{
+            let parentWrapper = d3.select(`[data-id='${v.parentIndex}']`);
+            parentWrapper.attr('isCollapsed',0);
+            parentWrapper.select('text').text('-')
+          })
+        }
     })
   
       // Transition nodes to their new position.
@@ -528,6 +536,7 @@ const initialParams = {
           tooltip.style('opacity', '0').style('display', 'none');
         }
       });
+      console.log('==============Updated=============')
     }
   
     function getCollapsibleSymbol(isCollapsed) {

@@ -697,7 +697,6 @@ function drawOrganizationChart(params) {
   var tree = d3.layout.tree().nodeSize([attrs.nodeWidth + 40, attrs.nodeHeight]);
   var diagonal = d3.svg.diagonal()
     .projection(function(d) {
-      debugger;
       return [d.x + attrs.nodeWidth / 2, d.y + attrs.nodeHeight / 2];
     });
 
@@ -1150,6 +1149,7 @@ function drawOrganizationChart(params) {
     })
 
     if (d.children) {
+      console.log(d.children)
       d._children = d.children;
       d.children = null;
     } else {
