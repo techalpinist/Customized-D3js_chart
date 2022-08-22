@@ -562,7 +562,9 @@ const initialParams = {
             } else {
               e.parentIndex = params.id
               d.children.push(e);
-            } 
+            }
+            //sorting nodes for sequential display
+            sortChildren(d.children)
           } 
         })
         update(d); return;
@@ -604,6 +606,16 @@ const initialParams = {
       }
     }
   
+    function sortChildren(children) {
+      children.sort((a,b)=>{
+        if(a.uniqueIdentifier > b.uniqueIdentifier)
+          return 1;
+        if(a.uniqueIdentifier < b.uniqueIdentifier)
+          return -1;
+        return 0;
+      })
+    }
+
     // ########################################################
   
     // Redraw for zoom
