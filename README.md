@@ -7,4 +7,3 @@ Demo
   <img src="https://github.com/Alpinist-Denis/D3js_chart/blob/master/screencast.gif" alt="screenshot" width="100%">
 </p>
 Get more improved D3.js respects.
-If you want to establish data visualization components in your taste, visit <a target="_blank" href="https://github.com/Alpinist-Denis/">Alpinist-Denis</a>
